@@ -23,6 +23,16 @@ class Thread {
     /**********
      * Titles *
      **********/
+    public function getTitle() : string {
+        $sql = 'SELECT title FROM threads_current_title_view WHERE id = :i';
+        $q = DB::prepare($sql);
+        $q->bindValue(':i', $this->id, PDO::PARAM_INT);
+        $q->execute();
+        $q->bindColumn('title', $title, PDO::PARAM_STR);
+        $q->fetch(PDO::FETCH_BOUND);
+        return $title;
+    }
+
     public static function validTitle(string $t) : bool {
         // TODO: Actual validation
         return true;
