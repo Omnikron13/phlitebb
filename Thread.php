@@ -65,6 +65,22 @@ class Thread {
         return $t;
     }
 
+    /*********
+     * Posts *
+     *********/
+    public function getPosts() : array {
+        $sql = 'SELECT id FROM posts WHERE threadID = :tid';
+        $query = DB::prepare($sql);
+        $query->bindValue(':tid', $this->id, PDO::PARAM_INT);
+        $query->execute();
+        return array_map(
+            function($pid) {
+                return new Post($pid);
+            },
+            $query->fetchAll(PDO::FETCH_COLUMN, 0)
+        );
+    }
+
     /************
      * Database *
      ************/
