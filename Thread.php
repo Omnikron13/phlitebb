@@ -6,6 +6,7 @@ require_once __DIR__.'/PhliteBBException.php';
 
 use PDO;
 use Phlite\DB;
+use Phlite\User;
 
 class Thread {
     protected $id = NULL;
@@ -55,6 +56,13 @@ class Thread {
         $query->bindValue(':t', $title, PDO::PARAM_STR);
         $query->execute();
         return new self(DB::get()->lastInsertId());
+    }
+
+    // Porcelain method which adds a new thread /and/ associated first post.
+    public static function post(string $title, string $text, User $user) : self {
+        $t = self::add($title);
+        Post::add($text, $t, $user);
+        return $t;
     }
 
     /************
