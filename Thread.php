@@ -41,6 +41,8 @@ class Thread {
     /*********************
      * Thread management *
      *********************/
+    // This is a plumbing method which adds a dangling thread, with no associated user or timestamp.
+    // The userID and timestamp are determined by the first post in a thread.
     public static function add(string $title) : self {
         if(!self::validTitle($title))
             throw new ThreadException(ThreadException::CODE['TITLE_INVALID']);
