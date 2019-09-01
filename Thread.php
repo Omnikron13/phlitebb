@@ -47,6 +47,7 @@ class Thread {
     public static function setupDB() : void {
         DB::execFile('sql/threads.sql');
         DB::execFile('sql/threads_edits.sql');
+        DB::execFile('sql/threads_current_title_view.sql');
     }
 }
 
