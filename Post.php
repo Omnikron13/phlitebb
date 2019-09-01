@@ -26,6 +26,17 @@ class Post {
         return $this->id;
     }
 
+    // Returns time of original post (not of latest edit).
+    public function getTime() : int {
+        $sql = 'SELECT time FROM posts WHERE id = :i';
+        $q = DB::prepare($sql);
+        $q->bindValue(':i', $this->id, PDO::PARAM_INT);
+        $q->execute();
+        $q->bindColumn('time', $time, PDO::PARAM_INT);
+        $q->fetch(PDO::FETCH_BOUND);
+        return $time;
+    }
+
     /********
      * Text *
      ********/
