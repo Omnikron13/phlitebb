@@ -43,6 +43,31 @@ class Thread {
         return true;
     }
 
+    /********
+     * Time *
+     ********/
+    // Returns time of the first post in the thread, or null if this is a dangling thread.
+    public function getFirstPostTime() : ?int {
+        $sql = 'SELECT time FROM posts WHERE threadID = :i ORDER BY time ASC LIMIT 1';
+        $q = DB::prepare($sql);
+        $q->bindValue(':i', $this->id, PDO::PARAM_INT);
+        $q->execute();
+        $q->bindColumn('time', $time, PDO::PARAM_INT);
+        $q->fetch(PDO::FETCH_BOUND);
+        return $time;
+    }
+
+    // Returns time of the last post in the thread, or null if this is a dangling thread.
+    public function getLastPostTime() : ?int {
+        $sql = 'SELECT time FROM posts WHERE threadID = :i ORDER BY time DESC LIMIT 1';
+        $q = DB::prepare($sql);
+        $q->bindValue(':i', $this->id, PDO::PARAM_INT);
+        $q->execute();
+        $q->bindColumn('time', $time, PDO::PARAM_INT);
+        $q->fetch(PDO::FETCH_BOUND);
+        return $time;
+    }
+
     /*********************
      * Thread management *
      *********************/
