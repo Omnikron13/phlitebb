@@ -20,6 +20,10 @@ class Thread {
         $this->id = $id;
     }
 
+    public function getID() : int {
+        return $this->id;
+    }
+
     /**********
      * Titles *
      **********/
