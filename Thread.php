@@ -66,8 +66,8 @@ class Thread {
 class ThreadException extends PhliteBBException {
     public const CODE_PREFIX = 100;
     public const CODE = [
-        'THREAD_NOT_FOUND'    => self::CODE_PREFIX + 1,
-        'THREAD_NAME_INVALID' => self::CODE_PREFIX + 2,
+        'NOT_FOUND'     => self::CODE_PREFIX + 1,
+        'TITLE_INVALID' => self::CODE_PREFIX + 2,
     ];
     protected const MESSAGE = [
         self::CODE['NOT_FOUND']     => 'Thread not found',
