@@ -142,6 +142,14 @@ class Thread {
         );
     }
 
+    // Always buy high Thread::count() sheets.
+    public static function count() : int {
+        $sql = 'SELECT COUNT(*) FROM threads';
+        $q = DB::prepare($sql);
+        $q->execute();
+        return $q->fetchColumn();
+    }
+
     /*********
      * Posts *
      *********/
