@@ -9,6 +9,12 @@ use Phlite\DB;
 use Phlite\User;
 
 class Thread {
+    // Order in which threads will be returned
+    public const ORDER = [
+        'THREAD' => 1,
+        'POST'   => 2,
+    ];
+
     protected $id = NULL;
  
     public function __construct(int $id) {
@@ -91,8 +97,17 @@ class Thread {
     }
 
     // Probably not so useful at scale.
-    public static function getAll() : array {
-        $sql = 'SELECT id FROM threads ORDER BY id DESC';
+    public static function getAll(int $order = self::ORDER['THREAD']) : array {
+        switch($order) {
+            case self::ORDER['THREAD']:
+                $sql = 'SELECT id FROM threads ORDER BY id DESC';
+                break;
+            case self::ORDER['POST']:
+                $sql = 'SELECT id FROM threads_by_latest_post_view';
+                break;
+            default:
+                throw new ThreadException(ThreadException::CODE['NOT_FOUND']);
+        }
         $q = DB::prepare($sql);
         $q->execute();
         return array_map(
