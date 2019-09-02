@@ -90,6 +90,19 @@ class Thread {
         return $t;
     }
 
+    // Probably not so useful at scale.
+    public static function getAll() : array {
+        $sql = 'SELECT id FROM threads';
+        $q = DB::prepare($sql);
+        $q->execute();
+        return array_map(
+            function($id) {
+                return new Thread($id);
+            },
+            $q->fetchAll(PDO::FETCH_COLUMN, 0)
+        );
+    }
+
     /*********
      * Posts *
      *********/
