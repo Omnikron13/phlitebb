@@ -118,6 +118,30 @@ class Thread {
         );
     }
 
+    // More useful, as it can extract a slice of threads.
+    public static function get(int $limit, int $offset, int $order = self::ORDER['THREAD']) : array {
+        switch($order) {
+            case self::ORDER['THREAD']:
+                $sql = 'SELECT id FROM threads ORDER BY id DESC LIMIT :l OFFSET :o';
+                break;
+            case self::ORDER['POST']:
+                $sql = 'SELECT id FROM threads_by_latest_post_view LIMIT :l OFFSET :o';
+                break;
+            default:
+                throw new ThreadException(ThreadException::CODE['NOT_FOUND']);
+        }
+        $q = DB::prepare($sql);
+        $q->bindValue(':l', $limit,  PDO::PARAM_INT);
+        $q->bindValue(':o', $offset, PDO::PARAM_INT);
+        $q->execute();
+        return array_map(
+            function($id) {
+                return new Thread($id);
+            },
+            $q->fetchAll(PDO::FETCH_COLUMN, 0)
+        );
+    }
+
     /*********
      * Posts *
      *********/
