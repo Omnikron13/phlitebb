@@ -92,7 +92,7 @@ class Thread {
 
     // Probably not so useful at scale.
     public static function getAll() : array {
-        $sql = 'SELECT id FROM threads';
+        $sql = 'SELECT id FROM threads ORDER BY id DESC';
         $q = DB::prepare($sql);
         $q->execute();
         return array_map(
