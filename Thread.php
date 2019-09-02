@@ -126,6 +126,7 @@ class Thread {
         DB::execFile(__DIR__.'/sql/threads.sql');
         DB::execFile(__DIR__.'/sql/threads_edits.sql');
         DB::execFile(__DIR__.'/sql/threads_current_title_view.sql');
+        DB::execFile(__DIR__.'/sql/threads_by_latest_post_view.sql');
     }
 }
 
