@@ -75,9 +75,9 @@ class Post {
      * Database *
      ************/
     public static function setupDB() : void {
-        DB::execFile('sql/posts.sql');
-        DB::execFile('sql/posts_edits.sql');
-        DB::execFile('sql/posts_current_text_view.sql');
+        DB::execFile(__DIR__.'/sql/posts.sql');
+        DB::execFile(__DIR__.'/sql/posts_edits.sql');
+        DB::execFile(__DIR__.'/sql/posts_current_text_view.sql');
     }
 }
 
