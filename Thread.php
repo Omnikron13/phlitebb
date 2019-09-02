@@ -166,6 +166,11 @@ class Thread {
         );
     }
 
+    // Convenience to add a new post to the end of this thread.
+    public function reply(string $text, User $user) : Post {
+        return Post::add($text, $self, $user);
+    }
+
     /************
      * Database *
      ************/
