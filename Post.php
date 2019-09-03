@@ -41,6 +41,17 @@ class Post {
         return $time;
     }
 
+    // Returns User which originally posted the post.
+    public function getUser() : User {
+        $sql = 'SELECT userID FROM posts WHERE id = :i';
+        $q = DB::prepare($sql);
+        $q->bindValue(':i', $this->id, PDO::PARAM_INT);
+        $q->execute();
+        $q->bindColumn('userID', $id, PDO::PARAM_INT);
+        $q->fetch(PDO::FETCH_BOUND);
+        return new User($id);
+    }
+
     /********
      * Text *
      ********/
