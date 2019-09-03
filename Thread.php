@@ -27,6 +27,10 @@ class Thread {
         $this->id = $id;
     }
 
+    public function __toString() : string {
+        return $this->getTitle();
+    }
+
     public function getID() : int {
         return $this->id;
     }

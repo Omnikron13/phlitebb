@@ -22,6 +22,10 @@ class Post {
         $this->id = $id;
     }
 
+    public function __toString() : string {
+        return $this->getText();
+    }
+
     public function getID() : int {
         return $this->id;
     }
