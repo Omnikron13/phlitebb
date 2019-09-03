@@ -54,6 +54,11 @@ class Post {
         return $text;
     }
 
+    //Return text formatted with paragraph tags, sanitised for output, etc.
+    public function getFormattedText() : string {
+        return self::format($this->getText());
+    }
+
     public static function validText(string $t) : bool {
         // TODO: Actual validation
         return true;
