@@ -59,6 +59,24 @@ class Post {
         return true;
     }
 
+    // Return text with prettified paragraph tags, line breaks, stripped unallowed HTML tags, etc.
+    protected static function format(string $s) : string {
+        // TODO: doesn't strip naughty attributes, which is insecure
+        $stripped = strip_tags($s, '<a><b><i>');
+
+        // Replace multiple newlines by wrapping the preceding text in <p> tags.
+        $paragraphs = array_reduce(
+            preg_split('/\n{2,}/', $stripped),
+            function($carry, $item) {
+                return $carry .= "<p>$item</p>";
+            },
+            ''
+        );
+
+        // Replace remaining single newlines with breaks.
+        return str_replace("\n", '<br />', $paragraphs);
+    }
+
     /*******************
      * Post management *
      *******************/
