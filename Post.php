@@ -70,6 +70,18 @@ class Post {
         return self::format($this->getText());
     }
 
+    // Replace placeholders in a template file with various data about the post.
+    public function render() : string {
+        $text = $this->getFormattedText();
+        // TODO: config for template file
+        $text = str_replace('[text]', $text, file_get_contents(__DIR__.'/templates/post.html'));
+        // TODO: config for time format
+        $text = str_replace('[time]', date('d/m/y H:i', $this->getTime()), $text);
+        $text = str_replace('[username]', $this->getUser(), $text);
+        // TODO: further replacements for e.g. userID for linking, last edit, etc.
+        return $text;
+    }
+
     public static function validText(string $t) : bool {
         // TODO: Actual validation
         return true;
