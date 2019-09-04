@@ -189,7 +189,6 @@ class Thread {
 
     // Render a section of a thread, along with page/navigation links.
     public function renderPosts(int $limit, int $offset = 0) : string {
-        $template = file_get_contents(__DIR__.'/templates/thread.html');
         $posts = array_reduce(
             $this->getPosts($limit, $offset),
             function($carry, $item) {
@@ -197,9 +196,14 @@ class Thread {
             },
             ''
         );
-        $template = str_replace('[posts]', $posts, $template);
-        $template = str_replace('[title]', $this->getTitle(), $template);
-        return $template;
+        return Template::render(
+            // TODO: config for template file
+            __DIR__.'/templates/thread.html',
+            [
+                'posts' => $posts,
+                'title' => $this->getTitle(),
+            ],
+        );
     }
 
     // Render navigation information/links for a thread.
