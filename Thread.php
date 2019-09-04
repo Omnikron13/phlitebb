@@ -157,10 +157,12 @@ class Thread {
     /*********
      * Posts *
      *********/
-    public function getPosts() : array {
-        $sql = 'SELECT id FROM posts WHERE threadID = :tid';
+    public function getPosts(int $limit = -1, int $offset = -1) : array {
+        $sql = 'SELECT id FROM posts WHERE threadID = :tid LIMIT :l OFFSET :o';
         $query = DB::prepare($sql);
         $query->bindValue(':tid', $this->id, PDO::PARAM_INT);
+        $query->bindValue(':l',   $limit,    PDO::PARAM_INT);
+        $query->bindValue(':o',   $offset,   PDO::PARAM_INT);
         $query->execute();
         return array_map(
             function($pid) {
