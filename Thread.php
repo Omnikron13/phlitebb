@@ -3,6 +3,7 @@ namespace PhliteBB;
 
 require_once 'phlite/Phlite.php';
 require_once __DIR__.'/PhliteBBException.php';
+require_once __DIR__.'/Template.php';
 
 use PDO;
 use Phlite\DB;
@@ -199,6 +200,21 @@ class Thread {
         $template = str_replace('[posts]', $posts, $template);
         $template = str_replace('[title]', $this->getTitle(), $template);
         return $template;
+    }
+
+    // Render navigation information/links for a thread.
+    public function renderNav(int $limit, int $offset) : string {
+        $c = $this->countPosts();
+        $total = ceil($c / $limit);
+        $current = ceil(($offset+1) / $limit);
+        return Template::render(
+            // TODO: config for template file
+            __DIR__.'/templates/thread_nav.html',
+            [
+                'page_total'   => $total,
+                'page_current' => $current,
+            ],
+        );
     }
 
     /************
