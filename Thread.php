@@ -172,6 +172,15 @@ class Thread {
         );
     }
 
+    // Count the number of posts in this thread. Obviously.
+    public function countPosts() : int {
+        $sql = 'SELECT COUNT (*) FROM posts WHERE threadID = :id';
+        $q = DB::prepare($sql);
+        $q->bindValue(':id', $this->id, PDO::PARAM_INT);
+        $q->execute();
+        return $q->fetchColumn();
+    }
+
     // Convenience to add a new post to the end of this thread.
     public function reply(string $text, User $user) : Post {
         return Post::add($text, $this, $user);
