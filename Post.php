@@ -112,12 +112,12 @@ class Post {
         if(!self::validText($text))
             throw new PostException(PostException::CODE['TEXT_INVALID']);
         $sql = 'INSERT INTO posts(text, time, threadID, userID) VALUES(:text, :time, :tid, :uid)';
-        $query = DB::prepare($sql);
-        $query->bindValue(':text', $text,            PDO::PARAM_STR);
-        $query->bindValue(':time', time(),           PDO::PARAM_INT);
-        $query->bindValue(':tid',  $thread->getID(), PDO::PARAM_INT);
-        $query->bindValue(':uid',  $user->getID(),   PDO::PARAM_INT);
-        $query->execute();
+        $q = DB::prepare($sql);
+        $q->bindValue(':text', $text,            PDO::PARAM_STR);
+        $q->bindValue(':time', time(),           PDO::PARAM_INT);
+        $q->bindValue(':tid',  $thread->getID(), PDO::PARAM_INT);
+        $q->bindValue(':uid',  $user->getID(),   PDO::PARAM_INT);
+        $q->execute();
         return new self(DB::get()->lastInsertId());
     }
 

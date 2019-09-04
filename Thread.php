@@ -87,9 +87,9 @@ class Thread {
         if(!self::validTitle($title))
             throw new ThreadException(ThreadException::CODE['TITLE_INVALID']);
         $sql = 'INSERT INTO threads(title) VALUES(:t)';
-        $query = DB::prepare($sql);
-        $query->bindValue(':t', $title, PDO::PARAM_STR);
-        $query->execute();
+        $q = DB::prepare($sql);
+        $q->bindValue(':t', $title, PDO::PARAM_STR);
+        $q->execute();
         return new self(DB::get()->lastInsertId());
     }
 
@@ -159,16 +159,16 @@ class Thread {
      *********/
     public function getPosts(int $limit = -1, int $offset = -1) : array {
         $sql = 'SELECT id FROM posts WHERE threadID = :tid LIMIT :l OFFSET :o';
-        $query = DB::prepare($sql);
-        $query->bindValue(':tid', $this->id, PDO::PARAM_INT);
-        $query->bindValue(':l',   $limit,    PDO::PARAM_INT);
-        $query->bindValue(':o',   $offset,   PDO::PARAM_INT);
-        $query->execute();
+        $q = DB::prepare($sql);
+        $q->bindValue(':tid', $this->id, PDO::PARAM_INT);
+        $q->bindValue(':l',   $limit,    PDO::PARAM_INT);
+        $q->bindValue(':o',   $offset,   PDO::PARAM_INT);
+        $q->execute();
         return array_map(
             function($pid) {
                 return new Post($pid);
             },
-            $query->fetchAll(PDO::FETCH_COLUMN, 0)
+            $q->fetchAll(PDO::FETCH_COLUMN, 0)
         );
     }
 
