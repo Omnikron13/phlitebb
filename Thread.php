@@ -177,6 +177,21 @@ class Thread {
         return Post::add($text, $this, $user);
     }
 
+    // Render a section of a thread, along with page/navigation links.
+    public function renderPosts(int $limit, int $offset = 0) : string {
+        $template = file_get_contents(__DIR__.'/templates/thread.html');
+        $posts = array_reduce(
+            $this->getPosts($limit, $offset),
+            function($carry, $item) {
+                return $carry .= $item->render();
+            },
+            ''
+        );
+        $template = str_replace('[posts]', $posts, $template);
+        $template = str_replace('[title]', $this->getTitle(), $template);
+        return $template;
+    }
+
     /************
      * Database *
      ************/
