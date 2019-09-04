@@ -212,12 +212,22 @@ class Thread {
         $c = $this->countPosts();
         $total = ceil($c / $limit);
         $current = ceil(($offset+1) / $limit);
+        // TODO: move this whole section to its own function?
+        $links = '<ol>';
+        // TODO: refactor for very long threads
+        for($x = 1; $x <= $total; $x++) {
+            // TODO: config/template this?
+            // TODO: consider alternatives to $_SERVER['PHP_SELF']
+            $links .= "<li><a href=\"{$_SERVER['PHP_SELF']}?id={$this->id}&page=$x\">$x</a></li>";
+        }
+        $links .= '</ol>';
         return Template::render(
             // TODO: config for template file
             __DIR__.'/templates/thread_nav.html',
             [
                 'page_total'   => $total,
                 'page_current' => $current,
+                'links'        => $links,
             ],
         );
     }
