@@ -202,6 +202,7 @@ class Thread {
             [
                 'posts' => $posts,
                 'title' => $this->getTitle(),
+                'nav'   => $this->renderNav($limit, $offset),
             ],
         );
     }
