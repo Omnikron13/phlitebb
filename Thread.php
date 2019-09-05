@@ -227,6 +227,8 @@ class Thread {
     }
 
     public function renderNavLinks(int $current, int $total) : string {
+        if($total == 1)
+            return '';
         $links = '';
         // TODO: refactor for very long threads
         for($x = 1; $x <= $total; $x++) {
