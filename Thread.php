@@ -215,8 +215,19 @@ class Thread {
         $c = $this->countPosts();
         $total = ceil($c / $limit);
         $current = ceil(($offset+1) / $limit);
-        // TODO: move this whole section to its own function?
-        $links = '<ol>';
+        return Template::render(
+            // TODO: config for template file
+            __DIR__.'/templates/thread_nav.html',
+            [
+                'page_total'   => $total,
+                'page_current' => $current,
+                'links'        => $this->renderNavLinks($current, $total),
+            ],
+        );
+    }
+
+    public function renderNavLinks(int $current, int $total) : string {
+        $links = '';
         // TODO: refactor for very long threads
         for($x = 1; $x <= $total; $x++) {
             // TODO: config/template this?
@@ -226,16 +237,7 @@ class Thread {
             else
                 $links .= "<li>$x</li>";
         }
-        $links .= '</ol>';
-        return Template::render(
-            // TODO: config for template file
-            __DIR__.'/templates/thread_nav.html',
-            [
-                'page_total'   => $total,
-                'page_current' => $current,
-                'links'        => $links,
-            ],
-        );
+        return "<ol>$links</ol>";
     }
 
     /************
