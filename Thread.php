@@ -187,6 +187,9 @@ class Thread {
         return Post::add($text, $this, $user);
     }
 
+    /*************
+     * Rendering *
+     *************/
     // Render a section of a thread, along with page/navigation links.
     public function renderPosts(int $limit, int $offset = 0) : string {
         $posts = array_reduce(
