@@ -218,7 +218,10 @@ class Thread {
         for($x = 1; $x <= $total; $x++) {
             // TODO: config/template this?
             // TODO: consider alternatives to $_SERVER['PHP_SELF']
-            $links .= "<li><a href=\"{$_SERVER['PHP_SELF']}?id={$this->id}&page=$x\">$x</a></li>";
+            if($x != $current)
+                $links .= "<li><a href=\"{$_SERVER['PHP_SELF']}?id={$this->id}&page=$x\">$x</a></li>";
+            else
+                $links .= "<li>$x</li>";
         }
         $links .= '</ol>';
         return Template::render(
