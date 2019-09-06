@@ -110,13 +110,10 @@ class Post {
     }
 
     // Return text with prettified paragraph tags, line breaks, stripped unallowed HTML tags, etc.
-    protected static function format(string $s) : string {
-        // TODO: doesn't strip naughty attributes, which is insecure
-        $stripped = strip_tags($s, '<a><b><i>');
-
+    protected static function format(string $html) : string {
         // Replace multiple newlines by wrapping the preceding text in <p> tags.
-        $paragraphs = array_reduce(
-            preg_split('/\n{2,}/', $stripped),
+        $html = array_reduce(
+            preg_split('/\n{2,}/', $html),
             function($carry, $item) {
                 return $carry .= "<p>$item</p>";
             },
@@ -124,7 +121,51 @@ class Post {
         );
 
         // Replace remaining single newlines with breaks.
-        return str_replace("\n", '<br />', $paragraphs);
+        $html = str_replace("\n", '<br />', $html);
+
+        // Strip out nonsense tags so DOM can work smoothly.
+        $html = (new \tidy())->repairString(
+            $html, 
+            [
+                'output-xhtml'    => true,
+                'show-body-only'  => true,
+            ],
+        );
+
+        $dom = new \DOMDocument();
+        $dom->loadHTML($html);
+
+        foreach(iterator_to_array($dom->getElementsByTagName('body')[0]->childNodes) as $n) {
+            self::sanitiseTag($n);
+        }
+
+        $out = $dom->saveXML();
+
+        // This is dirtier than my broswer history...
+        $regex = '/<\?xml.*?body>(.*)<\/body><\/html>/s';
+        preg_match($regex, $out, $match);
+        return $match[1];
+    }
+
+    protected static function sanitiseTag(\DOMNode $node) {
+        if(!is_a($node, 'DOMElement'))
+            return;
+        // Remove naughty tags
+        if(!in_array($node->tagName, self::WHITELIST_TAGS)) {
+            $node->parentNode->removeChild($node);
+            return;
+        }
+        // Remove naughty attributes
+        // (Must not iterate over the attributes directly, or removing during the loop fucks shit up.)
+        foreach(iterator_to_array($node->attributes) as $a) {
+            if(!in_array($a->name, self::WHITELIST_ATTR)) {
+                $node->removeAttributeNode($a);
+            }
+        }
+        if(!$node->hasChildNodes());
+        foreach($node->childNodes as $n) {
+            self::sanitiseTag($n);
+        }
     }
 
     /*******************
