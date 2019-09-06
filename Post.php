@@ -111,6 +111,9 @@ class Post {
 
     // Return text with prettified paragraph tags, line breaks, stripped unallowed HTML tags, etc.
     protected static function format(string $html) : string {
+        // Strip carriage returns to make further processing uniform.
+        $html = str_replace("\r", '', $html);
+
         // Replace multiple newlines by wrapping the preceding text in <p> tags.
         $html = array_reduce(
             preg_split('/\n{2,}/', $html),
