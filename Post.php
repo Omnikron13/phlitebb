@@ -10,6 +10,25 @@ use Phlite\DB;
 use Phlite\User;
 
 class Post {
+    // Tags which won't be stripped when formatting text for output.
+    public const WHITELIST_TAGS = [
+        'a',
+        'abbr',
+        'b',
+        'br',
+        'i',
+        'img',
+        'p',
+    ];
+
+    // Attributes which won't be stripped when formatting text for output.
+    public const WHITELIST_ATTR = [
+        'alt',
+        'href',
+        'src',
+        'title',
+    ];
+
     protected $id = NULL;
  
     public function __construct(int $id) {
