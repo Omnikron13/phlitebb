@@ -147,6 +147,7 @@ class Post {
         return $match[1];
     }
 
+    // TODO: config for whitelists?
     protected static function sanitiseTag(\DOMNode $node) {
         if(!is_a($node, 'DOMElement'))
             return;
