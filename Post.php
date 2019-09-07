@@ -166,7 +166,9 @@ class Post {
                 $node->removeAttributeNode($a);
             }
         }
-        if(!$node->hasChildNodes());
+        // TODO: is this needed..?
+        if(!$node->hasChildNodes())
+            return;
         foreach($node->childNodes as $n) {
             self::sanitiseTag($n);
         }
